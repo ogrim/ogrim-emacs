@@ -5,17 +5,28 @@
 (message "Emacs is powering up. Please to wait, Herr %s!" current-user)
 
 (require 'package)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 
 (defvar my-packages '(better-defaults paredit ido-ubiquitous smex zenburn-theme
-                      clojure-mode cider))
+                      clojure-mode cider magit))
 
 (package-initialize)
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
 
+;; If package installation fails, make sure you have GnuTLS available
+;; http://xn--9dbdkw.se/diary/how_to_enable_GnuTLS_for_Emacs_24_on_Windows/index.en.html
+;; http://sourceforge.net/projects/ezwinports/files/
 
+;; To test, eval this code:
+;; (condition-case e
+;;     (delete-process
+;;      (gnutls-negotiate
+;;       :process (open-network-stream "test" nil "www.google.com" 443)
+;;       :hostname "www.google.com"
+;;       :verify-error t))
+;;   (error e))
 
 
 
@@ -227,7 +238,7 @@ Inherited tags will be considered."
 (setq org-directory "C:\\org")
 
 (find-file "C:\\org\\planner.org")
-(find-file "C:\\work\\work.org")
+;(find-file "C:\\work\\work.org")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clojure
@@ -287,6 +298,7 @@ Inherited tags will be considered."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq inhibit-startup-message t)
 (set-default 'indent-tabs-mode nil)
 (auto-compression-mode t)
 (show-paren-mode 1)
