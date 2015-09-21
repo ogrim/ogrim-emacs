@@ -34,7 +34,8 @@
 ;; util ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+(defun first (list) (car list))
+(defun second (list) (car (cdr list)))
 
 (defun my-next-sentence ()
   (interactive)
@@ -237,14 +238,13 @@ Inherited tags will be considered."
 (setq org-indent-mode-turns-on-hiding-stars nil)
 (setq org-directory "C:\\org")
 
-(find-file "C:\\org\\planner.org")
 ;(find-file "C:\\work\\work.org")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clojure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'clojure-mode)
+;(require 'clojure-mode)
 
 (eval-after-load 'clojure-mode
   '(font-lock-add-keywords
@@ -270,6 +270,8 @@ Inherited tags will be considered."
 (eval-after-load 'find-file-in-project
   '(add-to-list 'ffip-patterns "*.clj"))
 
+(defun turn-on-paredit () (paredit-mode 1))
+(add-hook 'clojure-mode-hook 'turn-on-paredit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
@@ -281,7 +283,7 @@ Inherited tags will be considered."
 (global-set-key (kbd "<C-f8>") 'org-todo-list)
 
 (global-set-key "\C-c\C-w" 'comment-or-uncomment-region)
-(global-set-key "\C-c w" 'comment-or-uncomment-region)
+(global-set-key "\C-cw" 'comment-or-uncomment-region)
 
 (global-set-key "\M-i" 'shrink-window)
 (global-set-key (kbd "M-I") 'enlarge-window-horizontally)
@@ -315,4 +317,14 @@ Inherited tags will be considered."
 ;; each 50MB of allocated data (the default is on every 0.76MB)
 (setq gc-cons-threshold 50000000)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load files dropped in the personal folder
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(message "Loading personal configuration files")
+(mapc 'load (directory-files (expand-file-name ".emacs.d/personal") 't "^[^#].*el$"))
+
+
+
 (server-start)
+
+(find-file "C:\\org\\planner.org")
