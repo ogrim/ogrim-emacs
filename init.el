@@ -4,22 +4,50 @@
 
 (message "Emacs is powering up. Please to wait, Herr %s!" current-user)
 
-(require 'package)
-(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+(setq default-directory (concat (getenv "HOME") "/"))
 
-(defvar my-packages '(better-defaults paredit ido-ubiquitous smex zenburn-theme
-                      clojure-mode cider magit))
+(require 'package)
+;;(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  (when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+    (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
+(package-initialize)
+
+;;(add-to-list 'package-archives '("melpa" . "melpa.org/packages/"))
+
+(defvar my-packages '(better-defaults paredit ido-completing-read+ smex zenburn-theme magit doom-themes))
 
 (package-initialize)
+
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+
+(require 'doom-themes)
+
+;; Global settings (defaults)
+(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+      doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+(load-theme 'doom-one t)
+(doom-themes-org-config)
+
+(require 'git-commit)
+
 
 ;; If package installation fails, make sure you have GnuTLS available
 ;; http://xn--9dbdkw.se/diary/how_to_enable_GnuTLS_for_Emacs_24_on_Windows/index.en.html
 ;; http://sourceforge.net/projects/ezwinports/files/
 
-;; To test, eval this code:
+;; To test, eval this code, if it says nil then TLS works:
 ;; (condition-case e
 ;;     (delete-process
 ;;      (gnutls-negotiate
@@ -120,8 +148,8 @@
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 
 (global-hl-line-mode +1)
-(load-theme 'zenburn t)
-(set-default-font "Fira Mono-13")
+;;(load-theme 'zenburn t)
+(set-default-font "Consolas-13")
 
 (add-hook 'text-mode-hook 'remove-dos-eol)
 
@@ -297,6 +325,10 @@ Inherited tags will be considered."
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 (define-key global-map (kbd "C-<backspace>") 'backward-kill-word)
 
+(define-key global-map (kbd "C-x b") 'helm-buffers-list)
+(define-key global-map (kbd "M-x") 'helm-M-x)
+(define-key global-map (kbd "C-x C-f") 'helm-find-files)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -311,6 +343,8 @@ Inherited tags will be considered."
 
 (mouse-avoidance-mode 'cat-and-mouse)
 
+(setq display-time-24hr-format t)
+
 (display-time)
 
 ;; reduce the frequency of garbage collection by making it happen on
@@ -323,8 +357,66 @@ Inherited tags will be considered."
 (message "Loading personal configuration files")
 (mapc 'load (directory-files (expand-file-name ".emacs.d/personal") 't "^[^#].*el$"))
 
+(helm-mode 1)
+
+(require 'telephone-line)
+
+(setq telephone-line-lhs
+      '((evil   . (telephone-line-evil-tag-segment))
+        (accent . (telephone-line-vc-segment
+                   telephone-line-erc-modified-channels-segment
+                   telephone-line-process-segment))
+        (nil    . (telephone-line-minor-mode-segment
+                   telephone-line-buffer-segment))))
+(setq telephone-line-rhs
+      '((nil    . (telephone-line-misc-info-segment))
+        (accent . (telephone-line-major-mode-segment))
+        (evil   . (telephone-line-airline-position-segment))))
+
+
+(telephone-line-mode 1)
+
+;(setq backup-directory-alist `(("." . "~/.saves")))
+;(setq create-lockfiles nil)
+
+;(setq backup-by-copying t)
+;(setq backup-directory-alist '((".*" . ,"~/.emacs.d/backups")))
+;;(setq auto-save-file-name-transforms '((".*" . "~/.emacs.d/backups" t)))
+
+(defvar --backup-directory (concat user-emacs-directory "backups"))
+(if (not (file-exists-p --backup-directory))
+        (make-directory --backup-directory t))
+(setq backup-directory-alist `(("." . ,--backup-directory)))
+(setq make-backup-files t               ; backup of a file the first time it is saved.
+      backup-by-copying t               ; don't clobber symlinks
+      version-control t                 ; version numbers for backup files
+      delete-old-versions t             ; delete excess backup files silently
+      delete-by-moving-to-trash t
+      kept-old-versions 6               ; oldest versions to keep when a new numbered backup is made (default: 2)
+      kept-new-versions 9               ; newest versions to keep when a new numbered backup is made (default: 2)
+      auto-save-default t               ; auto-save every buffer that visits a file
+      auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
+      auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
+      )
 
 
 (server-start)
 
-(find-file "C:\\org\\planner.org")
+(find-file "C:\\org\\work.org")
+
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (hackernews telephone-line nlinum helm doom-themes zenburn-theme smex paredit magit ido-completing-read+ better-defaults))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
