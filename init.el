@@ -167,8 +167,8 @@
 |           |           |                 |           |
 |           |           |                 |           |
 |           |           |                 |           |
-| sum       |         0 |               0 |           |
-#+TBLFM: @8$2=vsum(@2$2..@7$2)::@8$3=vsum(@2$3..@7$3)")
+| sum       |           |                 |           |
+#+TBLFM: @8$2=vsum(@2$2..@7$2)::@8$3=vsum(@2$3..@7$3)::@8$4=@8$2-2.5")
 
 ;; Parse an HH::MM date into a list containing a pair of numbers, (HH MM)
 (defun my-parse-hhmm (hhmm)
