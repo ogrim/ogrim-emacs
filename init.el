@@ -22,7 +22,7 @@
 
 ;;(add-to-list 'package-archives '("melpa" . "melpa.org/packages/"))
 
-(defvar my-packages '(better-defaults paredit ido-completing-read+ smex zenburn-theme magit doom-themes))
+(defvar my-packages '(better-defaults paredit ido-completing-read+ smex zenburn-theme magit doom-themes telephone-line))
 
 (package-initialize)
 
@@ -149,7 +149,7 @@
 
 (global-hl-line-mode +1)
 ;;(load-theme 'zenburn t)
-(set-default-font "Consolas-13")
+(set-default-font "Consolas-13.5:antialias=subpixel")
 
 (add-hook 'text-mode-hook 'remove-dos-eol)
 
