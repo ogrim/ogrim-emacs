@@ -18,11 +18,13 @@
   (when (< emacs-major-version 24)
     ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
-(package-initialize)
 
 ;;(add-to-list 'package-archives '("melpa" . "melpa.org/packages/"))
 
-(defvar my-packages '(better-defaults paredit ido-completing-read+ smex zenburn-theme magit doom-themes telephone-line))
+;; remember to install fonts on Windows: 
+;; M-x all-the-icons-install-fonts
+;; downloads the fonts, install them manually
+(defvar my-packages '(better-defaults paredit ido-completing-read+ smex zenburn-theme magit doom-themes telephone-line doom-modeline helm))
 
 (package-initialize)
 
@@ -32,6 +34,9 @@
 
 
 (require 'doom-themes)
+
+(require 'doom-modeline)
+
 
 ;; Global settings (defaults)
 (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -149,7 +154,8 @@
 
 (global-hl-line-mode +1)
 ;;(load-theme 'zenburn t)
-(set-default-font "Consolas-13.5:antialias=subpixel")
+;;(set-default-font "Consolas-13:antialias=subpixel")
+(set-face-attribute 'default nil :height 120 :family "Consolas")
 
 (add-hook 'text-mode-hook 'remove-dos-eol)
 
@@ -229,7 +235,18 @@ Inherited tags will be considered."
         nil
       subtree-end)))
 
-(setq org-agenda-files (list "C:\\org\\planner.org" "C:\\work\\work.org"))
+(defun unfill-paragraph ()
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+
+(defun unfill-region ()
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-region (region-beginning) (region-end) nil)))
+
+
+(setq org-agenda-files (list "C:\\org\\work.org"))
 (setq org-latex-to-pdf-process
        '("pdflatex -interaction nonstopmode %b"
          "bibtex %b"
@@ -247,10 +264,11 @@ Inherited tags will be considered."
             (define-key org-mode-map (kbd "C-c j") 'timerange-insert-hours-minus-lunch)
             (define-key org-mode-map (kbd "C-c t") 'insert-timetable)
             (define-key org-mode-map (kbd "C-c SPC") 'ace-jump-mode)
+            (define-key org-mode-map (kbd "M-Q") 'unfill-paragraph)
             (local-unset-key [(meta tab)])
             (reftex-mode)
-            (add-to-list 'org-export-latex-packages-alist '("" "amsmath" t))
-            (setcar (rassoc '("wasysym" t) org-export-latex-default-packages-alist) "integrals")
+            ;(add-to-list 'org-export-latex-packages-alist '("" "amsmath" t))
+            ;(setcar (rassoc '("wasysym" t) org-export-latex-default-packages-alist) "integrals")
             (make-local-variable 'sentence-highlight-mode)
             (setq sentence-highlight-mode t)
             (add-hook 'post-command-hook 'sentence-highlight-current)
@@ -412,11 +430,13 @@ Inherited tags will be considered."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (hackernews telephone-line nlinum helm doom-themes zenburn-theme smex paredit magit ido-completing-read+ better-defaults))))
+   '(all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews telephone-line nlinum helm doom-themes zenburn-theme smex paredit magit ido-completing-read+ better-defaults)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+(doom-modeline-mode 1)
