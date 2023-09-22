@@ -3,6 +3,7 @@
        (if (equal system-type 'windows-nt) "USERNAME" "USER")))
 
 ;(message "Emacs is powering up. Please to wait, Herr %s!" current-user)
+(setq frame-title-format "emacs@ogrim")
 
 (setq default-directory (concat (getenv "HOME") "/"))
 
