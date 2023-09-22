@@ -2,7 +2,7 @@
       (getenv
        (if (equal system-type 'windows-nt) "USERNAME" "USER")))
 
-(message "Emacs is powering up. Please to wait, Herr %s!" current-user)
+;(message "Emacs is powering up. Please to wait, Herr %s!" current-user)
 
 (setq default-directory (concat (getenv "HOME") "/"))
 
@@ -19,12 +19,14 @@
     ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 
+
+
 ;;(add-to-list 'package-archives '("melpa" . "melpa.org/packages/"))
 
 ;; remember to install fonts on Windows: 
 ;; M-x all-the-icons-install-fonts
 ;; downloads the fonts, install them manually
-(defvar my-packages '(better-defaults paredit ido-completing-read+ smex zenburn-theme magit doom-themes telephone-line doom-modeline helm))
+(defvar my-packages '(better-defaults paredit ido-completing-read+ smex zenburn-theme magit doom-themes telephone-line doom-modeline ivy))
 
 (package-initialize)
 
@@ -32,6 +34,8 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+(use-package all-the-icons
+             :if (display-graphic-p))
 
 (require 'doom-themes)
 
@@ -42,8 +46,12 @@
 (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
       doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-(load-theme 'doom-one t)
-(doom-themes-org-config)
+;(load-theme 'doom-one t)
+;(doom-themes-org-config)
+
+(require 'modus-themes)
+(load-theme 'modus-vivendi-tinted :no-confirm)
+
 
 (require 'git-commit)
 
@@ -155,7 +163,8 @@
 (global-hl-line-mode +1)
 ;;(load-theme 'zenburn t)
 ;;(set-default-font "Consolas-13:antialias=subpixel")
-(set-face-attribute 'default nil :height 120 :family "Consolas")
+;;(set-face-attribute 'default nil :height 120 :family "Consolas")
+(set-face-attribute 'default nil :bold t :height 130 :family "Victor Mono")
 
 (add-hook 'text-mode-hook 'remove-dos-eol)
 
@@ -322,7 +331,7 @@ Inherited tags will be considered."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(global-set-key "\C-cl" 'org-store-link)
+;(global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 (global-set-key (kbd "<f8>") 'org-agenda-list)
@@ -343,9 +352,16 @@ Inherited tags will be considered."
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 (define-key global-map (kbd "C-<backspace>") 'backward-kill-word)
 
-(define-key global-map (kbd "C-x b") 'helm-buffers-list)
-(define-key global-map (kbd "M-x") 'helm-M-x)
-(define-key global-map (kbd "C-x C-f") 'helm-find-files)
+;(define-key global-map (kbd "C-x b") 'helm-buffers-list)
+;(define-key global-map (kbd "M-x") 'helm-M-x)
+;(define-key global-map (kbd "C-x C-f") 'helm-find-files)
+
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+
+(global-set-key (kbd "C-s") 'swiper)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc
@@ -369,13 +385,38 @@ Inherited tags will be considered."
 ;; each 50MB of allocated data (the default is on every 0.76MB)
 (setq gc-cons-threshold 50000000)
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; LSP and things
+;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'lsp-mode)
+;; Either place zls in your PATH or add the following:
+(setq lsp-zig-zls-executable "C:\\bin\\zls\\bin\\zls.exe")
+
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (lsp-enable-which-key-integration t)
+)
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load files dropped in the personal folder
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (message "Loading personal configuration files")
 (mapc 'load (directory-files (expand-file-name ".emacs.d/personal") 't "^[^#].*el$"))
 
-(helm-mode 1)
+;(helm-mode 1)
+
+(ivy-mode)
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
 
 (require 'telephone-line)
 
@@ -430,7 +471,7 @@ Inherited tags will be considered."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews telephone-line nlinum helm doom-themes zenburn-theme smex paredit magit ido-completing-read+ better-defaults)))
+   '(swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews telephone-line nlinum helm doom-themes zenburn-theme smex paredit magit ido-completing-read+)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
