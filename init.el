@@ -27,7 +27,7 @@
 ;; remember to install fonts on Windows: 
 ;; M-x all-the-icons-install-fonts
 ;; downloads the fonts, install them manually
-(defvar my-packages '(better-defaults paredit ido-completing-read+ smex zenburn-theme magit doom-themes telephone-line doom-modeline ivy))
+(defvar my-packages '(better-defaults paredit ido-completing-read+ smex telephone-line doom-modeline ivy))
 
 (package-initialize)
 
@@ -38,8 +38,13 @@
 (use-package all-the-icons
              :if (display-graphic-p))
 
-(require 'doom-themes)
+;; (use-package exec-path-from-shell
+;;    :if (memq window-system '(mac ns))
+;;    :ensure t
+;;    :config
+;;    (exec-path-from-shell-initialize))
 
+;(require 'doom-themes)
 (require 'doom-modeline)
 
 
@@ -47,8 +52,6 @@
 (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
       doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-;(load-theme 'doom-one t)
-;(doom-themes-org-config)
 
 (require 'modus-themes)
 (load-theme 'modus-vivendi-tinted :no-confirm)
@@ -70,10 +73,7 @@
 ;;       :verify-error t))
 ;;   (error e))
 
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; util ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun first (list) (car list))
@@ -97,7 +97,7 @@
 
 (setq sentence-end "[.?!][]\"')]*\\($\\|\t\\| \\)[ \t\n]*")
 (setq sentence-end-double-space nil)
-(setq sentence-bg-color "#383838")
+(setq sentence-bg-color "#303A6F")
 (setq sentence-face (make-face 'sentence-face-background))
 (set-face-background sentence-face sentence-bg-color)
 
@@ -410,7 +410,7 @@ Inherited tags will be considered."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load files dropped in the personal folder
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(message "Loading personal configuration files")
+;(message "Loading personal configuration files")
 (mapc 'load (directory-files (expand-file-name ".emacs.d/personal") 't "^[^#].*el$"))
 
 ;(helm-mode 1)
@@ -460,9 +460,9 @@ Inherited tags will be considered."
       )
 
 
-(server-start)
+;(server-start)
 
-(find-file "C:\\org\\work.org")
+; (find-file "C:\\org\\work.org")
 
 
 
@@ -472,7 +472,7 @@ Inherited tags will be considered."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews telephone-line nlinum helm doom-themes zenburn-theme smex paredit magit ido-completing-read+)))
+   '(exec-path-from-shell which-key-posframe swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews telephone-line nlinum helm smex paredit ido-completing-read+)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
