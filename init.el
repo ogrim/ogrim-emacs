@@ -78,8 +78,10 @@
 ;;       :verify-error t))
 ;;   (error e))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun first (list) (car list))
 (defun second (list) (car (cdr list)))
@@ -158,6 +160,13 @@
   (interactive)
   (revert-buffer t t)
   (remove-dos-eol))
+
+(defun search-selection (beg end)
+  "search for selected text"
+  (interactive "r")
+  (let ((selection (buffer-substring-no-properties beg end)))
+    (deactivate-mark)
+    (swiper selection)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; cosmetic
@@ -358,15 +367,13 @@ Inherited tags will be considered."
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 (define-key global-map (kbd "C-<backspace>") 'backward-kill-word)
 
-;(define-key global-map (kbd "C-x b") 'helm-buffers-list)
-;(define-key global-map (kbd "M-x") 'helm-M-x)
-;(define-key global-map (kbd "C-x C-f") 'helm-find-files)
 
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 
 (global-set-key (kbd "C-s") 'swiper)
+(define-key global-map (kbd "C-M-s") 'search-selection)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -376,6 +383,7 @@ Inherited tags will be considered."
 (set-default 'indent-tabs-mode nil)
 (auto-compression-mode t)
 (show-paren-mode 1)
+(setq ring-bell-function 'ignore)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -415,10 +423,9 @@ Inherited tags will be considered."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load files dropped in the personal folder
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;(message "Loading personal configuration files")
 (mapc 'load (directory-files (expand-file-name ".emacs.d/personal") 't "^[^#].*el$"))
 
-;(helm-mode 1)
+
 
 (ivy-mode)
 (setq ivy-use-virtual-buffers t)
@@ -450,8 +457,13 @@ Inherited tags will be considered."
 
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
-(global-set-key (kbd "C-c C-n")  'neotree-show)
+(global-set-key (kbd "C-c C-n")  'neotree-find)
+;(define-key neotree-mode-map (kbd "<backtab>") ') 
+(define-key csharp-mode-map (kbd "C-c C-n") nil)
+
+
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+;(setq neo-smart-open t)
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -461,9 +473,6 @@ Inherited tags will be considered."
 ;; if icons are missing, need to install nerd-icons
 ;; M-x nerd-icons-install-fonts
 
-;; (server-start)
-
-;; (find-file "C:\\org\\work.org")
 
 (defun mp-toggle-window-dedication ()
   "Toggles window dedication in the selected window."
@@ -487,5 +496,3 @@ Inherited tags will be considered."
  ;; If there is more than one, they won't work right.
  )
 
-
-;(doom-modeline-mode 1)
