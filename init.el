@@ -2,7 +2,6 @@
       (getenv
        (if (equal system-type 'windows-nt) "USERNAME" "USER")))
 
-;(message "Emacs is powering up. Please to wait, Herr %s!" current-user)
 (setq frame-title-format "emacs@ogrim")
 
 (setq default-directory (concat (getenv "HOME") "/"))
@@ -27,7 +26,7 @@
 ;; remember to install fonts on Windows: 
 ;; M-x all-the-icons-install-fonts
 ;; downloads the fonts, install them manually
-(defvar my-packages '(better-defaults paredit ido-completing-read+ smex telephone-line doom-modeline ivy))
+(defvar my-packages '(better-defaults paredit ido-completing-read+ smex doom-modeline ivy))
 
 (package-initialize)
 
@@ -35,8 +34,14 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
-(use-package all-the-icons
-             :if (display-graphic-p))
+
+;; (use-package all-the-icons
+;;   :if (display-graphic-p))
+
+(when (display-graphic-p)
+  (require 'all-the-icons))
+
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
 ;; (use-package exec-path-from-shell
 ;;    :if (memq window-system '(mac ns))
@@ -45,7 +50,7 @@
 ;;    (exec-path-from-shell-initialize))
 
 ;(require 'doom-themes)
-(require 'doom-modeline)
+;(require 'doom-modeline)
 
 
 ;; Global settings (defaults)
@@ -419,22 +424,6 @@ Inherited tags will be considered."
 (setq ivy-use-virtual-buffers t)
 (setq enable-recursive-minibuffers t)
 
-(require 'telephone-line)
-
-(setq telephone-line-lhs
-      '((evil   . (telephone-line-evil-tag-segment))
-        (accent . (telephone-line-vc-segment
-                   telephone-line-erc-modified-channels-segment
-                   telephone-line-process-segment))
-        (nil    . (telephone-line-minor-mode-segment
-                   telephone-line-buffer-segment))))
-(setq telephone-line-rhs
-      '((nil    . (telephone-line-misc-info-segment))
-        (accent . (telephone-line-major-mode-segment))
-        (evil   . (telephone-line-airline-position-segment))))
-
-
-(telephone-line-mode 1)
 
 ;(setq backup-directory-alist `(("." . "~/.saves")))
 ;(setq create-lockfiles nil)
@@ -459,11 +448,28 @@ Inherited tags will be considered."
       auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
       )
 
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+(global-set-key (kbd "C-c C-n")  'neotree-show)
+(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
 
-;(server-start)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
-; (find-file "C:\\org\\work.org")
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+;; if icons are missing, need to install nerd-icons
+;; M-x nerd-icons-install-fonts
 
+;; (server-start)
+
+;; (find-file "C:\\org\\work.org")
+
+(defun mp-toggle-window-dedication ()
+  "Toggles window dedication in the selected window."
+  (interactive)
+  (set-window-dedicated-p (selected-window)
+     (not (window-dedicated-p (selected-window)))))
 
 
 (custom-set-variables
@@ -471,8 +477,9 @@ Inherited tags will be considered."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(neo-window-width 35)
  '(package-selected-packages
-   '(exec-path-from-shell which-key-posframe swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews telephone-line nlinum helm smex paredit ido-completing-read+)))
+   '(neotree all-the-icons-dired format-all exec-path-from-shell which-key-posframe swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews nlinum helm smex paredit ido-completing-read+)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -481,4 +488,4 @@ Inherited tags will be considered."
  )
 
 
-(doom-modeline-mode 1)
+;(doom-modeline-mode 1)
