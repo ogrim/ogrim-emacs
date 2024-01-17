@@ -442,7 +442,8 @@ Inherited tags will be considered."
 ;(setq backup-directory-alist '((".*" . ,"~/.emacs.d/backups")))
 ;;(setq auto-save-file-name-transforms '((".*" . "~/.emacs.d/backups" t)))
 
-(defvar --backup-directory (concat user-emacs-directory "backups"))
+
+(defvar --backup-directory (concat user-emacs-directory "backups/"))
 (if (not (file-exists-p --backup-directory))
         (make-directory --backup-directory t))
 (setq backup-directory-alist `(("." . ,--backup-directory)))
@@ -457,6 +458,8 @@ Inherited tags will be considered."
       auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
       auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
       )
+
+(setq lock-file-name-transforms `((".*" ,--backup-directory t)))
 
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
