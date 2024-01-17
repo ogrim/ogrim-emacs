@@ -417,7 +417,10 @@ Inherited tags will be considered."
   (lsp-enable-which-key-integration t)
 )
 
-
+(add-to-list 'auto-mode-alist '("\\.csproj\\'" . nxml-mode))
+(add-hook 'nxml-mode-hook 
+          (lambda () 
+            (define-key nxml-mode-map (kbd "C-c C-n") nil)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -457,10 +460,10 @@ Inherited tags will be considered."
 
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
-(global-set-key (kbd "C-c C-n")  'neotree-find)
+
 ;(define-key neotree-mode-map (kbd "<backtab>") ') 
 (define-key csharp-mode-map (kbd "C-c C-n") nil)
-
+(global-set-key (kbd "C-c C-n")  'neotree-find)
 
 (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
 ;(setq neo-smart-open t)
