@@ -132,7 +132,7 @@
                              (sentence-end-pos) (current-buffer))))))
 
 (setq sentence-extent (make-overlay 0 0))
-(overlay-put sentence-extent 'face sentence-face)
+;(overlay-put sentence-extent 'face sentence-face)
 
 (defun kill-current-sentence (&rest ignore)
   "Kill current sentence."
@@ -293,10 +293,10 @@ Inherited tags will be considered."
             (reftex-mode)
             ;(add-to-list 'org-export-latex-packages-alist '("" "amsmath" t))
             ;(setcar (rassoc '("wasysym" t) org-export-latex-default-packages-alist) "integrals")
-            (make-local-variable 'sentence-highlight-mode)
-            (setq sentence-highlight-mode t)
-            (add-hook 'post-command-hook 'sentence-highlight-current)
-            (set (make-local-variable 'global-hl-line-mode) nil)
+            ;(make-local-variable 'sentence-highlight-mode)
+            ;(setq sentence-highlight-mode t)
+            ;(add-hook 'post-command-hook 'sentence-highlight-current)
+            ;(set (make-local-variable 'global-hl-line-mode) nil)
             (add-to-list 'org-structure-template-alist
              (quote ("C" "#+begin_comment\n?\n#+end_comment" "<!--\n?\n-->")))
             ))
@@ -308,13 +308,34 @@ Inherited tags will be considered."
 (setq org-indent-mode-turns-on-hiding-stars nil)
 (setq org-directory "C:\\org")
 
-;(find-file "C:\\work\\work.org")
+
+(use-package org-roam 
+  :ensure t
+  :custom
+  (org-roam-directory "C:\\org\\roam-notes")
+  (org-roam-completion-everywhere t)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         
+         :map org-mode-map
+         ("C-M-i" . completion-at-point))
+  :config
+  (org-roam-setup)
+  (org-roam-db-autosync-mode)
+  (setq org-return-follows-link  t)
+  (setq org-roam-db-update-on-save t)
+  (setq org-roam-graph-executable "C:\\Program Files\\Graphviz\\bin\\dot.exe"))
+
+
+
+                                        ;(find-file "C:\\work\\work.org")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clojure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(require 'clojure-mode)
+                                        ;(require 'clojure-mode)
 
 (eval-after-load 'clojure-mode
   '(font-lock-add-keywords
@@ -383,7 +404,8 @@ Inherited tags will be considered."
 (set-default 'indent-tabs-mode nil)
 (auto-compression-mode t)
 (show-paren-mode 1)
-(setq ring-bell-function 'ignore)
+;(setq ring-bell-function 'ignore)
+(setq visible-bell t)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -499,7 +521,7 @@ Inherited tags will be considered."
  ;; If there is more than one, they won't work right.
  '(neo-window-width 35)
  '(package-selected-packages
-   '(neotree all-the-icons-dired format-all exec-path-from-shell which-key-posframe swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews nlinum helm smex paredit ido-completing-read+)))
+   '(org-roam neotree all-the-icons-dired format-all exec-path-from-shell which-key-posframe swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews nlinum helm smex paredit ido-completing-read+)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
