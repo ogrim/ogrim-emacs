@@ -49,14 +49,6 @@
 ;;    :config
 ;;    (exec-path-from-shell-initialize))
 
-;(require 'doom-themes)
-;(require 'doom-modeline)
-
-
-;; Global settings (defaults)
-(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-      doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
 
 (require 'modus-themes)
 (load-theme 'modus-vivendi-tinted :no-confirm)
@@ -176,7 +168,7 @@
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 
 (global-hl-line-mode +1)
-;;(load-theme 'zenburn t)
+
 ;;(set-default-font "Consolas-13:antialias=subpixel")
 ;;(set-face-attribute 'default nil :height 120 :family "Consolas")
 (set-face-attribute 'default nil :bold t :height 130 :family "Victor Mono")
@@ -403,7 +395,7 @@ Inherited tags will be considered."
 (setq inhibit-startup-message t)
 (set-default 'indent-tabs-mode nil)
 (auto-compression-mode t)
-(show-paren-mode 1)
+(show-paren-mode t)
 ;(setq ring-bell-function 'ignore)
 (setq visible-bell t)
 
@@ -421,6 +413,8 @@ Inherited tags will be considered."
 ;; each 50MB of allocated data (the default is on every 0.76MB)
 (setq gc-cons-threshold 50000000)
 
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -429,7 +423,7 @@ Inherited tags will be considered."
 
 (require 'lsp-mode)
 ;; Either place zls in your PATH or add the following:
-(setq lsp-zig-zls-executable "C:\\bin\\zls\\bin\\zls.exe")
+(setq lsp-zig-zls-executable "C:\\bin\\zls.exe")
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -443,6 +437,8 @@ Inherited tags will be considered."
 (add-hook 'nxml-mode-hook 
           (lambda () 
             (define-key nxml-mode-map (kbd "C-c C-n") 'neotree-find)))
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -521,7 +517,7 @@ Inherited tags will be considered."
  ;; If there is more than one, they won't work right.
  '(neo-window-width 35)
  '(package-selected-packages
-   '(org-roam neotree all-the-icons-dired format-all exec-path-from-shell which-key-posframe swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews nlinum helm smex paredit ido-completing-read+)))
+   '(counsel powershell modus-themes magit gleam-ts-mode org-roam-ui emojify docker-compose-mode org-roam neotree all-the-icons-dired format-all exec-path-from-shell which-key-posframe swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews nlinum helm smex paredit ido-completing-read+)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
