@@ -28,11 +28,34 @@
 ;; downloads the fonts, install them manually
 (defvar my-packages '(better-defaults paredit ido-completing-read+ smex doom-modeline ivy))
 
-(package-initialize)
+(unless package--initialized
+  (package-initialize))
+
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+(require 'cl-lib) ;; for cl-every
+(unless (and (boundp 'package-selected-packages)
+             (cl-every #'package-installed-p package-selected-packages))
+  (package-refresh-contents)
+  (package-install-selected-packages))
+
+
+(use-package corfu
+  :init
+  (global-corfu-mode))
+
+
 
 
 ;; (use-package all-the-icons
@@ -139,7 +162,7 @@
 (set-terminal-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
-(set-clipboard-coding-system 'utf-16le-dos)
+;(set-clipboard-coding-system 'utf-16le-dos)
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
 (defun remove-dos-eol ()
@@ -169,9 +192,11 @@
 
 (global-hl-line-mode +1)
 
-;;(set-default-font "Consolas-13:antialias=subpixel")
+
 ;;(set-face-attribute 'default nil :height 120 :family "Consolas")
-(set-face-attribute 'default nil :bold t :height 130 :family "Victor Mono")
+;;(set-face-attribute 'default nil :bold t :height 130 :family "Victor Mono")
+(set-face-attribute 'default nil :bold t :height 130 :family "Fantasque Sans Mono")
+
 
 (add-hook 'text-mode-hook 'remove-dos-eol)
 
@@ -262,7 +287,7 @@ Inherited tags will be considered."
     (fill-region (region-beginning) (region-end) nil)))
 
 
-(setq org-agenda-files (list "C:\\org\\work.org"))
+(setq org-agenda-files (list "C:\\org\\work.org"))
 (setq org-latex-to-pdf-process
        '("pdflatex -interaction nonstopmode %b"
          "bibtex %b"
@@ -355,6 +380,37 @@ Inherited tags will be considered."
 
 (defun turn-on-paredit () (paredit-mode 1))
 (add-hook 'clojure-mode-hook 'turn-on-paredit)
+
+
+;;;;;;;;;;;;;;; gleam
+;; Minimal, works for both TS and legacy modes
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(gleam-ts-mode . ("gleam" "lsp")))
+  (add-to-list 'eglot-server-programs
+               '(gleam-mode . ("gleam" "lsp"))))
+
+(add-hook 'gleam-ts-mode-hook #'eglot-ensure)
+(add-hook 'gleam-mode-hook    #'eglot-ensure)
+
+;; Optional: format on save via LSP
+(defun my-gleam-format-on-save ()
+  (add-hook 'before-save-hook #'eglot-format-buffer -10 t))
+(add-hook 'gleam-ts-mode-hook #'my-gleam-format-on-save)
+(add-hook 'gleam-mode-hook    #'my-gleam-format-on-save)
+(add-to-list 'auto-mode-alist '("\\.gleam\\'" . gleam-ts-mode))
+
+
+
+
+
+
+
+
+
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keybindings
@@ -509,6 +565,7 @@ Inherited tags will be considered."
   (set-window-dedicated-p (selected-window)
      (not (window-dedicated-p (selected-window)))))
 
+(server-start)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -517,7 +574,14 @@ Inherited tags will be considered."
  ;; If there is more than one, they won't work right.
  '(neo-window-width 35)
  '(package-selected-packages
-   '(counsel powershell modus-themes magit gleam-ts-mode org-roam-ui emojify docker-compose-mode org-roam neotree all-the-icons-dired format-all exec-path-from-shell which-key-posframe swiper which-key lsp-mode zig-mode slime all-the-icons markdown-mode org slack json-mode jq-format dockerfile-mode yaml-mode doom-modeline hackernews nlinum helm smex paredit ido-completing-read+)))
+   '(all-the-icons all-the-icons-dired corfu counsel docker-compose-mode
+                   dockerfile-mode doom-modeline emojify
+                   exec-path-from-shell format-all gleam-ts-mode
+                   hackernews helm ido-completing-read+ jq-format
+                   json-mode lsp-mode magit markdown-mode modus-themes
+                   neotree nlinum org org-roam org-roam-ui paredit
+                   powershell slack slime smex swiper which-key
+                   which-key-posframe yaml-mode zig-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
