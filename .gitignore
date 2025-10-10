@@ -1,0 +1,14 @@
+elpa/
+backups/
+straight/
+emojis/
+eln-cache/
+auto-save-list/
+.cache/
+
+projects
+recentf
+smex-items
+tramp
+org-roam.db
+.lsp-session-v*
