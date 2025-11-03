@@ -1,11 +1,17 @@
 # OGRIM-EMACS
 
-Just some notes from myself after slapping things around for Win11 and Emacs 29.1
+FRIENDSHIP ENDED WITH WINDOWS
 
-Make sure Emacs bin folder is on the PATH.
+NOW ARCH LINUX IS MY BEST FRIEND
 
-Go to `shell:startup` and stick `StartEmacsServer.bat` there to startup the Emacs server automatically.
+THANK YOU FOR YOUR ATTENTION TO THIS MATTER
 
-Stick `emacs.bat` on the PATH and use that to open one frame only. Calling `emacs.bat` directly will open my work.org (old approach stopped working, so needed to pass a file). Passing any other parameter will open that instead, making it easy to open files in Emacs from the console.
+~~Just some notes from myself after slapping things around for Win11 and Emacs 29.1+~~
 
-Remember to install fonts: `all-the-icons-install-fonts` and `nerd-icons-install-fonts`.
+~~Make sure Emacs bin folder is on the PATH.~~
+
+~~Go to `shell:startup` and stick `StartEmacsServer.bat` there to startup the Emacs server automatically.~~
+
+~~Stick `emacs.bat` on the PATH and use that to open one frame only. Calling `emacs.bat` directly will open my work.org (old approach stopped working, so needed to pass a file). Passing any other parameter will open that instead, making it easy to open files in Emacs from the console.~~
+
+~~Remember to install fonts: `all-the-icons-install-fonts` and `nerd-icons-install-fonts`.~~
