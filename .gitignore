@@ -5,6 +5,9 @@ emojis/
 eln-cache/
 auto-save-list/
 .cache/
+games/
+transient/
+tree-sitter/
 
 projects
 recentf
@@ -12,3 +15,4 @@ smex-items
 tramp
 org-roam.db
 .lsp-session-v*
+.dap-breakpoints
