@@ -84,8 +84,7 @@ Inherited tags will be considered."
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
 
-
-(setq org-agenda-files (list "~/work/org/work.org"))
+(setq org-agenda-files (list "~/work/org/notes.org"))
 (setq org-latex-to-pdf-process
        '("pdflatex -interaction nonstopmode %b"
          "bibtex %b"
@@ -112,8 +111,8 @@ Inherited tags will be considered."
             ;(setq sentence-highlight-mode t)
             ;(add-hook 'post-command-hook 'sentence-highlight-current)
             ;(set (make-local-variable 'global-hl-line-mode) nil)
-            (add-to-list 'org-structure-template-alist
-             (quote ("C" "#+begin_comment\n?\n#+end_comment" "<!--\n?\n-->")))
+            ;; (add-to-list 'org-structure-template-alist
+            ;;  (quote ("C" "#+begin_comment\n?\n#+end_comment" "<!--\n?\n-->")))
             ))
 
 (setq reftex-cite-format 'natbib)
