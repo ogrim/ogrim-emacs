@@ -34,3 +34,8 @@
           (lambda ()
             (display-line-numbers-mode 1)
             (local-set-key (kbd "C-j") #'newline-and-indent)))
+
+(setq display-fill-column-indicator-column 100)
+
+(add-hook 'after-change-major-mode-hook
+          (lambda () (setq-local display-fill-column-indicator-column 100)))
