@@ -21,6 +21,10 @@
   (unless (minibufferp)
     (linum-mode 1)))
 
+(defun ukenummer ()
+  (interactive)
+  (insert (format-time-string "%V")))
+
 (setq sentence-end "[.?!][]\"')]*\\($\\|\t\\| \\)[ \t\n]*")
 (setq sentence-end-double-space nil)
 (setq sentence-bg-color "#303A6F")
