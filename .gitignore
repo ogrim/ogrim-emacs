@@ -16,3 +16,6 @@ tramp
 org-roam.db
 .lsp-session-v*
 .dap-breakpoints
+/.org-id-locations
+/bookmarks
+/eshell/
