@@ -33,10 +33,10 @@
 (straight-use-package 'better-defaults)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load files dropped in the personal folder
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load files dropped in the personal folder ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (mapc 'load (directory-files (expand-file-name ".emacs.d/personal") 't "^[^#].*el$"))
 
 (server-start)
-

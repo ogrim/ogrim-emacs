@@ -96,3 +96,8 @@
   (interactive)
   (set-window-dedicated-p (selected-window)
      (not (window-dedicated-p (selected-window)))))
+
+(defun copy-file-path ()
+  (interactive)
+  (kill-new (buffer-file-name)))
+;(global-set-key (kbd "C-c p") 'copy-file-path)
