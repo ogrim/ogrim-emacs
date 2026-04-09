@@ -29,3 +29,5 @@
 (define-key corfu-map (kbd "M-n") #'corfu-popupinfo-scroll-up)
 (define-key corfu-map (kbd "M-p") #'corfu-popupinfo-scroll-down)
 
+;(setq tab-always-indent 'complete)
+

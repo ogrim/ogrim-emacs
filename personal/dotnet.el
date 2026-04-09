@@ -22,6 +22,7 @@
 (with-eval-after-load 'eglot
   (define-key eglot-mode-map (kbd "C-.") #'eglot-code-actions)
   (define-key eglot-mode-map (kbd "C-c r") #'eglot-rename)
+  (define-key eglot-mode-map (kbd "C-c f") #'eglot-format)
   (defun my/eglot-organize-imports ()
     (interactive) (eglot-code-actions nil "source.organizeImports"))
   (define-key eglot-mode-map (kbd "C-c o") #'my/eglot-organize-imports))
@@ -31,6 +32,12 @@
 
 (add-hook 'eglot-managed-mode-hook
           (lambda () (eglot-inlay-hints-mode -1)))
+
+;; (add-hook 'eglot-managed-mode-hook
+;;           (lambda ()
+;;             (add-hook 'before-save-hook #'eglot-format nil t)))
+
+
 
 ;; (defun my/csharp-format-before-save ()
 ;;   (when (or (derived-mode-p 'csharp-mode) (derived-mode-p 'csharp-ts-mode))

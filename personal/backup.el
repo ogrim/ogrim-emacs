@@ -1,9 +1,16 @@
-(defvar --backup-directory (concat user-emacs-directory "backups/"))
+(defvar --backup-directory
+  (expand-file-name "backups/" user-emacs-directory))
 
-(if (not (file-exists-p --backup-directory))
-    (make-directory --backup-directory t))
+(make-directory --backup-directory t)
 
-(setq backup-directory-alist `(("." . ,--backup-directory)))
+(setq backup-directory-alist
+      `(("." . ,--backup-directory)))
+
+(setq lock-file-name-transforms
+      `((".*" ,--backup-directory t)))
+
+(setq auto-save-file-name-transforms
+      `((".*" ,--backup-directory t)))
 
 (setq make-backup-files t ; backup of a file the first time it is saved.
       backup-by-copying t ; don't clobber symlinks
@@ -16,5 +23,3 @@
       auto-save-timeout 20 ; number of seconds idle time before auto-save (default: 30)
       auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
       )
-
-(setq lock-file-name-transforms `((".*" ,--backup-directory t)))

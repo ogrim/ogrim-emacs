@@ -29,3 +29,23 @@
 
 (global-set-key (kbd "C-s") 'swiper)
 (define-key global-map (kbd "C-M-s") 'search-selection)
+
+(defun move-line-up ()
+  "Move the current line up by one."
+  (interactive)
+  (transpose-lines 1)
+  (forward-line -2)
+  ;(indent-according-to-mode)
+  )
+
+(defun move-line-down ()
+  "Move the current line down by one."
+  (interactive)
+  (forward-line 1)
+  (transpose-lines 1)
+  (forward-line -1)
+  ;(indent-according-to-mode)
+  )
+
+(global-set-key (kbd "M-p") 'move-line-up)
+(global-set-key (kbd "M-n") 'move-line-down)

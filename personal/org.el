@@ -1,6 +1,6 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; org-mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;
+;; org-mode ;;
+;;;;;;;;;;;;;;
 
 (defvar *timetable* "
 | timestamp | timer dag | timer aktivitet | aktivitet |
@@ -84,13 +84,14 @@ Inherited tags will be considered."
   (let ((fill-column (point-max)))
     (fill-region (region-beginning) (region-end) nil)))
 
+
 (setq org-agenda-files (list "~/work/org/notes.org"))
 (setq org-latex-to-pdf-process
-       '("pdflatex -interaction nonstopmode %b"
-         "bibtex %b"
-         "pdflatex -interaction nonstopmode %b"
-         "pdflatex -interaction nonstopmode %b"
-         "rm %b.bbl %b.blg"))
+      '("pdflatex -interaction nonstopmode %b"
+        "bibtex %b"
+        "pdflatex -interaction nonstopmode %b"
+        "pdflatex -interaction nonstopmode %b"
+        "rm %b.bbl %b.blg"))
 (add-hook 'org-mode-hook
           (lambda ()
             (define-key org-mode-map (kbd "C-c c") 'reftex-citep)
@@ -115,9 +116,11 @@ Inherited tags will be considered."
             ;;  (quote ("C" "#+begin_comment\n?\n#+end_comment" "<!--\n?\n-->")))
             ))
 
+(setq calendar-week-start-day 1)
+(setq org-agenda-start-on-weekday 1)
 (setq reftex-cite-format 'natbib)
 (setq org-log-done t)
-(setq org-todo-keywords '((sequence "NEXT" "WAITING" "DELEGATED" "|" "DONE" "CANCELED" )))
+(setq org-todo-keywords '((sequence "TODO" "DONE" )))
 (setq org-tag-alist '(("telefon" . ?t) ("epost" . ?e) ("hjemma" . ?h) ("data" . ?d)))
 (setq org-indent-mode-turns-on-hiding-stars nil)
 (setq org-directory "~/work/org")
@@ -140,9 +143,6 @@ Inherited tags will be considered."
   (org-roam-db-autosync-mode)
   (setq org-return-follows-link  t)
   (setq org-roam-db-update-on-save t)
-;  (setq org-roam-graph-executable "C:\\Program Files\\Graphviz\\bin\\dot.exe")
 )
-
-
 
                                         ;(find-file "C:\\work\\work.org")
