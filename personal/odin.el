@@ -3,5 +3,12 @@
 
 (add-to-list 'auto-mode-alist '("\\.odin\\'" . odin-mode))
 
-(add-hook 'odin-mode-hook #'lsp-deferred)
+(defun my-odin-run ()
+  (interactive)
+  (compile "odin run ."))
+
+(add-hook 'odin-mode-hook
+          (lambda ()
+            (lsp-deferred)
+            (define-key odin-mode-map (kbd "C-c r") #'my-odin-run)))
 
