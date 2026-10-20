@@ -19,3 +19,6 @@ org-roam.db
 /.org-id-locations
 /bookmarks
 /eshell/
+/var/
+
+projectile-bookmarks.eld

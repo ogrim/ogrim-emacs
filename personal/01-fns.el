@@ -101,3 +101,15 @@
   (interactive)
   (kill-new (buffer-file-name)))
 ;(global-set-key (kbd "C-c p") 'copy-file-path)
+
+(defun my/kr (n)
+  "Format N with space as thousands separator: 27022 -> \"27 022\"."
+  (let ((s (number-to-string n)))
+    (while (string-match "\\(.*[0-9]\\)\\([0-9][0-9][0-9]\\)" s)
+      (setq s (replace-match "\\1 \\2" t nil s)))
+    s))
+
+(defun my/num (s)
+  "Parse a field that may contain spaces: \"1 190\" -> 1190."
+  (string-to-number (replace-regexp-in-string " " "" s)))
+

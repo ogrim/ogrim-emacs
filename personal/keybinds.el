@@ -49,3 +49,6 @@
 
 (global-set-key (kbd "M-p") 'move-line-up)
 (global-set-key (kbd "M-n") 'move-line-down)
+
+(global-set-key (kbd "M-<left>") #'xref-go-back)
+(global-set-key (kbd "M-<right>") #'xref-go-forward)
