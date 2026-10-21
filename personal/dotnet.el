@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (when (fboundp 'treesit-available-p)
   (setq treesit-language-source-alist
         '((c-sharp "https://github.com/tree-sitter/tree-sitter-c-sharp")))

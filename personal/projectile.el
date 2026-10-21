@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package rg
   :straight t)
 
@@ -12,3 +14,5 @@
   (setq projectile-enable-caching t)
   (projectile-mode +1))
 
+
+(setq project-vc-extra-root-markers '(".project" "ols.json"))

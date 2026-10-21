@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package cape
   :straight t
   :ensure t

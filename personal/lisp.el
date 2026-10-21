@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (straight-use-package
   '(sly :type git :host github :repo "joaotavora/sly"))
 

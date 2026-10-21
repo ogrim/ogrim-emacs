@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package caddyfile-mode
   :straight t
   :ensure t)

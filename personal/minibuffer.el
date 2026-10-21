@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (straight-use-package 'swiper)
 (straight-use-package 'counsel)
 
@@ -6,16 +8,13 @@
   :config
   (prescient-persist-mode 1))
 
-(use-package ivy-prescient
+(use-package vertico-prescient
   :straight t
-  :after (ivy prescient)
+  :after (vertico prescient)
   :config
-  (ivy-prescient-mode 1))
-
-(ivy-mode)
-
-(setq ivy-use-virtual-buffers t)
+  (vertico-prescient-mode 1))
 
 (setq enable-recursive-minibuffers t)
 
-(global-set-key (kbd "C-c s") 'counsel-rg)
+(global-set-key (kbd "C-c s") #'consult-ripgrep)
+(global-set-key (kbd "C-s")   #'consult-line)

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (setq frame-title-format "emacs@ogrim")
 
 (defvar bootstrap-versivon)

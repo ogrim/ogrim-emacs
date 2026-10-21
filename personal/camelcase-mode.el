@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;;  camelCase-mode.el --- minor mode for editing with camelCase words
 ;;   Copyright (C) 2001  C.R.Manning
 ;;
