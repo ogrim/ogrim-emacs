@@ -1,5 +1,18 @@
 ;; -*- lexical-binding: t; -*-
 
+;; Got this working on Windows like this
+;; Install MSYS2, then in MSYS2 UCRT64 shell:
+;; pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain
+;; add bin folder to path (e.g C:\bin\msys64\ucrt64\bin)
+
+(with-eval-after-load 'treesit
+  (setf (alist-get 'c-sharp treesit-language-source-alist)
+        '("https://github.com/tree-sitter/tree-sitter-c-sharp"
+          :source-dir "src"
+          :cc "gcc"
+          :c++ "g++")))
+
+
 (when (fboundp 'treesit-available-p)
   (setq treesit-language-source-alist
         '((c-sharp "https://github.com/tree-sitter/tree-sitter-c-sharp")))
