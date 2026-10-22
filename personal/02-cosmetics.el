@@ -19,7 +19,10 @@
 
 (global-hl-line-mode +1)
 
-(set-face-attribute 'default nil :bold t :height 140 :family "Fantasque Sans Mono")
+(if (eq system-type 'windows-nt)
+    (set-face-attribute 'default nil :bold nil :height 140 :family "Fantasque Sans Mono")
+  (set-face-attribute 'default nil :bold t :height 140 :family "Fantasque Sans Mono"))
+
 
 (add-hook 'text-mode-hook 'remove-dos-eol)
 
