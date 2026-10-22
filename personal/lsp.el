@@ -22,7 +22,8 @@
   :bind (:map lsp-mode-map
          ("C-S-t"   . consult-lsp-symbols)          ; workspace-wide, live narrowing
          ("C-c l f" . consult-lsp-file-symbols)
-         ("C-S-M-t" . consult-lsp-file-symbols)))   ; current file only
+         ("C-S-M-t" . consult-lsp-file-symbols)
+         ("C-c l e" . consult-lsp-diagnostics)))   ; current file only
 
 (require 'lsp-mode)
 (require 'consult-lsp)
