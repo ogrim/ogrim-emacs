@@ -115,3 +115,11 @@
   "Parse a field that may contain spaces: \"1 190\" -> 1190."
   (string-to-number (replace-regexp-in-string " " "" s)))
 
+(defconst my/home
+  (if (eq system-type 'windows-nt)
+      (getenv "USERPROFILE")
+    (or (getenv "HOME" "~"))
+))
+
+(defun my/path-in-home (rel)
+  (expand-file-name rel (file-name-as-directory my/home)))

@@ -35,7 +35,9 @@
                 scheme-mode-hook))
   (add-hook hook #'enable-paredit-mode))
 
+
 (use-package exec-path-from-shell
+  :if (not (eq system-type 'windows-nt))
   :straight t
   :ensure t
   :init

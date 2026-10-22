@@ -87,7 +87,7 @@ Inherited tags will be considered."
     (fill-region (region-beginning) (region-end) nil)))
 
 
-(setq org-agenda-files (list "~/work/org/notes.org"))
+(setq org-agenda-files (list  (my/path-in-home "work/org/notes.org")))
 (setq org-latex-to-pdf-process
       '("pdflatex -interaction nonstopmode %b"
         "bibtex %b"
@@ -125,14 +125,14 @@ Inherited tags will be considered."
 (setq org-todo-keywords '((sequence "TODO" "DONE" )))
 (setq org-tag-alist '(("telefon" . ?t) ("epost" . ?e) ("hjemma" . ?h) ("data" . ?d)))
 (setq org-indent-mode-turns-on-hiding-stars nil)
-(setq org-directory "~/work/org")
+(setq org-directory (my/path-in-home "work/org"))
 
 
 (use-package org-roam
   :straight t
   :ensure t
   :custom
-  (org-roam-directory "~/work/org/roam-notes")
+  (org-roam-directory (my/path-in-home "work/org/roam-notes"))
   (org-roam-completion-everywhere t)
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
@@ -144,7 +144,6 @@ Inherited tags will be considered."
   (org-roam-setup)
   (org-roam-db-autosync-mode)
   (setq org-return-follows-link  t)
-  (setq org-roam-db-update-on-save t)
-)
+  (setq org-roam-db-update-on-save t))
 
                                         ;(find-file "C:\\work\\work.org")

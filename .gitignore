@@ -22,3 +22,7 @@ org-roam.db
 /var/
 
 projectile-bookmarks.eld
+projectile-frecency.eld
+org-persist/
+server/
+url/
