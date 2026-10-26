@@ -26,3 +26,4 @@ projectile-frecency.eld
 org-persist/
 server/
 url/
+session.*

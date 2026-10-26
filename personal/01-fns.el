@@ -118,7 +118,7 @@
 (defconst my/home
   (if (eq system-type 'windows-nt)
       (getenv "USERPROFILE")
-    (or (getenv "HOME" "~"))
+    (or (getenv "HOME") "~")
 ))
 
 (defun my/path-in-home (rel)
