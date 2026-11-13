@@ -19,19 +19,19 @@
         cider-clojure-cli-global-options ""))
 
 
-(use-package eglot
-  :straight t
-  :ensure t)
+;; (use-package eglot
+;;   :straight t
+;;   :ensure t)
 
 (add-hook 'clojure-mode-hook 'eglot-ensure)
 (add-hook 'clojurescript-mode-hook 'eglot-ensure)
 (add-hook 'clojurec-mode-hook 'eglot-ensure)
 
-(use-package paredit
-  :straight t
-  :ensure t
-  :hook ((clojure-mode . paredit-mode)
-         (emacs-lisp-mode . paredit-mode)))
+;; (use-package paredit
+;;   :straight t
+;;   :ensure t
+;;   :hook ((clojure-mode . paredit-mode)
+;;          (emacs-lisp-mode . paredit-mode)))
 
 (use-package rainbow-delimiters
   :straight t

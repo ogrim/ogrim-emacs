@@ -1,23 +1,16 @@
 ;; -*- lexical-binding: t; -*-
 
-(straight-use-package 'neotree)
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
+(use-package neotree
+  :straight t
+  :bind ("<f8>" . neotree-toggle)
+  :custom
+  (neo-window-width 35)
+  (neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
-;(define-key neotree-mode-map (kbd "<backtab>") ') 
-;(define-key csharp-mode-map (kbd "C-c C-n") nil)
-
-(add-hook 'c-mode-common-hook
-          (lambda () 
-            (define-key csharp-mode-map (kbd "C-c C-n") 'neotree-find)))
-
-(global-set-key (kbd "C-c C-n")  'neotree-find)
-
-(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-;(setq neo-smart-open t)
-
-(setq neo-window-width 35)
-
-(add-hook 'nxml-mode-hook 
-          (lambda () 
-            (define-key nxml-mode-map (kbd "C-c C-n") 'neotree-find)))
+(define-minor-mode my/neotree-keys-mode
+  "Global neotree bindings that override major-mode maps."
+  :global t
+  :keymap (let ((m (make-sparse-keymap)))
+            (define-key m (kbd "C-c C-n") #'neotree-find)
+            m))
+(my/neotree-keys-mode 1)

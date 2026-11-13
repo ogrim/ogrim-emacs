@@ -16,5 +16,3 @@
 
 (setq enable-recursive-minibuffers t)
 
-(global-set-key (kbd "C-c s") #'consult-ripgrep)
-(global-set-key (kbd "C-s")   #'consult-line)

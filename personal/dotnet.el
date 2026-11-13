@@ -1,79 +1,72 @@
 ;; -*- lexical-binding: t; -*-
 
-;; Got this working on Windows like this
-;; Install MSYS2, then in MSYS2 UCRT64 shell:
-;; pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain
-;; add bin folder to path (e.g C:\bin\msys64\ucrt64\bin)
 
-(with-eval-after-load 'treesit
-  (setf (alist-get 'c-sharp treesit-language-source-alist)
-        '("https://github.com/tree-sitter/tree-sitter-c-sharp"
-          :source-dir "src"
-          :cc "gcc"
-          :c++ "g++")))
+;; Windows: MSYS2 UCRT64 →
+;;   pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain
+;;   add ucrt64\bin to PATH
 
+;;; Tree-sitter
+(when (and (fboundp 'treesit-available-p) (treesit-available-p))
+  (require 'treesit)
+  (add-to-list 'treesit-language-source-alist
+               `(c-sharp "https://github.com/tree-sitter/tree-sitter-c-sharp"
+                         nil "src"
+                         ,@(when (eq system-type 'windows-nt) '("gcc" "g++"))))
+  (unless (treesit-language-available-p 'c-sharp)
+    (treesit-install-language-grammar 'c-sharp))
+  (add-to-list 'major-mode-remap-alist '(csharp-mode . csharp-ts-mode)))
 
-(when (fboundp 'treesit-available-p)
-  (setq treesit-language-source-alist
-        '((c-sharp "https://github.com/tree-sitter/tree-sitter-c-sharp")))
-  (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-ts-mode)))
+(add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.\\(csproj\\|props\\|targets\\)\\'" . nxml-mode))
 
+;; Eglot
 (use-package eglot
-  :straight t
+  :straight (:type built-in)
   :hook ((csharp-mode csharp-ts-mode) . eglot-ensure)
+  :bind (:map eglot-mode-map
+         ("C-."   . eglot-code-actions)
+         ("C-c r" . eglot-rename)
+         ("C-c f" . eglot-format)
+         ("C-c o" . eglot-code-action-organize-imports)
+         ("C-c i" . eglot-inlay-hints-mode))
   :config
-  ;; (add-to-list 'eglot-server-programs
-  ;;              '((csharp-mode csharp-ts-mode) . ("csharp-ls")))
-  (define-key eglot-mode-map (kbd "C-c i") #'eglot-inlay-hints-mode)
-)
+  (when-let ((omnisharp (or (executable-find "omnisharp")
+                            (executable-find "OmniSharp"))))
+    (add-to-list 'eglot-server-programs
+                 `((csharp-mode csharp-ts-mode) . (,omnisharp "-lsp"))))
+  (add-hook 'eglot-managed-mode-hook #'my/eglot-managed-setup))
 
-(with-eval-after-load 'eglot
-  (let* ((omnisharp (or (executable-find "omnisharp")
-                        (executable-find "OmniSharp"))))
-    (when omnisharp
-      (add-to-list 'eglot-server-programs
-                   `(csharp-mode . (,omnisharp "-lsp"))))))
+(defun my/csharp-before-save ()
+  (ignore-errors
+    (eglot-code-action-organize-imports (point-min) (point-max)))
+  (eglot-format-buffer))
 
-(with-eval-after-load 'eglot
-  (define-key eglot-mode-map (kbd "C-.") #'eglot-code-actions)
-  (define-key eglot-mode-map (kbd "C-c r") #'eglot-rename)
-  (define-key eglot-mode-map (kbd "C-c f") #'eglot-format)
-  (defun my/eglot-organize-imports ()
-    (interactive) (eglot-code-actions nil "source.organizeImports"))
-  (define-key eglot-mode-map (kbd "C-c o") #'my/eglot-organize-imports))
+(defun my/eglot-managed-setup ()
+  (eglot-inlay-hints-mode -1)
+  (when (derived-mode-p 'csharp-mode 'csharp-ts-mode)
+    (if (eglot-managed-p)
+        (add-hook 'before-save-hook #'my/csharp-before-save nil t)
+      (remove-hook 'before-save-hook #'my/csharp-before-save t))))
 
-
-(setq eglot-inlay-hints-mode nil)
-
-(add-hook 'eglot-managed-mode-hook
-          (lambda () (eglot-inlay-hints-mode -1)))
-
-;; (add-hook 'eglot-managed-mode-hook
-;;           (lambda ()
-;;             (add-hook 'before-save-hook #'eglot-format nil t)))
-
-
-
-;; (defun my/csharp-format-before-save ()
-;;   (when (or (derived-mode-p 'csharp-mode) (derived-mode-p 'csharp-ts-mode))
-;;     (eglot-format-buffer)))
-
-;; (add-hook 'before-save-hook #'my/csharp-format-before-save)
-
+;;; Editing
 (add-hook 'csharp-ts-mode-hook
           (lambda ()
-            (add-hook 'before-save-hook #'eglot-format-buffer nil t)
-            (add-hook 'before-save-hook #'my/eglot-organize-imports nil t)
             (local-set-key (kbd "<backtab>") #'completion-at-point)
             (rainbow-delimiters-mode 1)))
 
-(use-package dap-mode 
-  :straight t 
-  :ensure t 
-  :defer t
-  :config
-  (dap-auto-configure-mode)
-  (setq dap-netcore-download-url nil)
-  (setq dap-netcore-debugger-path "/usr/bin/netcoredbg"))
+;;; Debugging (DAP, eglot-compatible)
+(use-package dape
+  :straight t
+  :defer t)
 
-(add-to-list 'auto-mode-alist '("\\.csproj\\'" . nxml-mode))
+
+;; (use-package dap-mode 
+;;   :straight t 
+;;   :ensure t 
+;;   :defer t
+;;   :config
+;;   (dap-auto-configure-mode)
+;;   (setq dap-netcore-download-url nil)
+;;   (setq dap-netcore-debugger-path "/usr/bin/netcoredbg"))
+
+;; (add-to-list 'auto-mode-alist '("\\.csproj\\'" . nxml-mode))
