@@ -127,6 +127,9 @@ Inherited tags will be considered."
 (setq org-indent-mode-turns-on-hiding-stars nil)
 (setq org-directory (my/path-in-home "work/org"))
 
+(use-package org-tempo
+  :straight nil
+  :after org)
 
 (use-package org-roam
   :straight t
